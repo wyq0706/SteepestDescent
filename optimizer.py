@@ -7,6 +7,8 @@ EPS=1e-10
 Fletcher_Reeves=1
 Polak_Ribiere=2
 
+filePrefix="D://2017011991//source//optimizer//共轭梯度"
+
 
 '''
 以下函数和求导运算式根据具体问题修改
@@ -115,7 +117,7 @@ def SteepestDescent(p):
     plt2.plot(listC,listVal)
     plt2.set_ylabel("f(X)")
     plt2.set_xlabel("count")
-    plt.savefig("D://2017011991//source//optimizer//最速下降_"+str(p)+".jpg")
+    plt.savefig(filePrefix+str(p)+".jpg")
     plt.show()
     plt.close()
     return X,func(X),count
@@ -169,7 +171,7 @@ def ConjugateGradient(p):
     plt2.plot(listC,listVal)
     plt2.set_ylabel("f(X)")
     plt2.set_xlabel("count")
-    plt.savefig("D://2017011991//source//optimizer//共轭梯度"+str(p)+".jpg")
+    plt.savefig(filePrefix+str(p)+".jpg")
     plt.show()
     plt.close()
     return X,func(X),count
