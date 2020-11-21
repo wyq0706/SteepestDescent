@@ -7,7 +7,7 @@ EPS=1e-10
 Fletcher_Reeves=1
 Polak_Ribiere=2
 
-filePrefix="xxx/"
+filePrefix="D://2017011991//source//optimizer//"
 
 
 '''
@@ -35,30 +35,18 @@ def twiceGradientForT(X,D,t):
     x2=X[1]
     d1=D[0]
     d2=D[1]
-    return 24*np.power(d1,2)*np.power(x1+t*d1,2)-16*d1*d2*(x1+t*d1)-8*d1*d2*(x2+t*d2)+2*np.power(d1,2)+4*np.power(d2,2)
+    return 24*np.power(d1,2)*np.power(x1+t*d1,2)-16*d1*d2*(x1+t*d1)-8*d1*d1*(x2+t*d2)+2*np.power(d1,2)+4*np.power(d2,2)
 
 
-'''
+'''c
 牛顿法精确搜索
 '''
 def NewtonSearch(X,D):
-    t=float(0.1)
-    # print("func",OnceGradientForT(X,D,1),t)
+    t=float(0.99999999)
+    print("func0",OnceGradientForT(X,D,0.9),t)
     while np.abs(OnceGradientForT(X,D,t))>EPS:
         t=t-OnceGradientForT(X,D,t)/twiceGradientForT(X,D,t)
-        # print("func",OnceGradientForT(X,D,t),t)
-    return t
-
-
-'''
-梯度下降精确搜索
-'''
-def GradientSearch(X,D):
-    t=float(0.5)
-    # print("func",OnceGradientForT(X,D,1),t)
-    while np.abs(OnceGradientForT(X,D,t))>EPS*0.01:
-        t=t-OnceGradientForT(X,D,t)
-        # print("func",OnceGradientForT(X,D,t),t)
+        print("func",OnceGradientForT(X,D,t),t)
     return t
 
 
@@ -117,7 +105,7 @@ def SteepestDescent(p):
     plt2.plot(listC,listVal)
     plt2.set_ylabel("f(X)")
     plt2.set_xlabel("count")
-    plt.savefig(filePrefix+str(p)+".jpg")
+    plt.savefig(filePrefix+"最速下降"+str(p)+".jpg")
     plt.show()
     plt.close()
     return X,func(X),count
@@ -142,7 +130,7 @@ def ConjugateGradient(p):
 
 
     while np.linalg.norm([GradientValueForFunc(X)],2)>EPS:
-        if count==0:
+        if count/2==0:
             D=(-1)*np.array(GradientValueForFunc(X))
             t=NewtonSearch(X,D)
             X+=D*t
@@ -153,8 +141,7 @@ def ConjugateGradient(p):
             else:
                 a=np.matmul(D,D-lastD)/np.power(np.linalg.norm(lastD,2),2)
             D+=a*lastD
-            # Newton does not converge
-            t=GradientSearch(X,D)
+            t=NewtonSearch(X,D)
             X+=D*t
             # print("X",X)
 
@@ -171,7 +158,7 @@ def ConjugateGradient(p):
     plt2.plot(listC,listVal)
     plt2.set_ylabel("f(X)")
     plt2.set_xlabel("count")
-    plt.savefig(filePrefix+str(p)+".jpg")
+    plt.savefig(filePrefix+"共轭梯度"+str(p)+".jpg")
     plt.show()
     plt.close()
     return X,func(X),count
@@ -179,23 +166,23 @@ def ConjugateGradient(p):
 
 if __name__ == "__main__":
     # 最速下降法
-    # l1范数
-    rtn, val, cnt=SteepestDescent(1)
-    print(rtn[0],rtn[1],val,cnt)
+    # # l1范数
+    # rtn, val, cnt=SteepestDescent(1)
+    # print(rtn[0],rtn[1],val,cnt)
 
-    # l2范数
-    rtn, val, cnt=SteepestDescent(2)
-    print(rtn[0],rtn[1],val,cnt)
+    # # l2范数
+    # rtn, val, cnt=SteepestDescent(2)
+    # print(rtn[0],rtn[1],val,cnt)
 
-    # l_无穷大 范数
-    rtn, val, cnt=SteepestDescent(INFINITE)
-    print(rtn[0],rtn[1],val,cnt)
+    # # l_无穷大 范数
+    # rtn, val, cnt=SteepestDescent(INFINITE)
+    # print(rtn[0],rtn[1],val,cnt)
 
     # 共轭梯度法
     # Fletcher_Reeves
     rtn, val, cnt=ConjugateGradient(Fletcher_Reeves)
     print(rtn[0],rtn[1],val,cnt)
 
-    # Polak_Ribiere
-    rtn, val, cnt=ConjugateGradient(Polak_Ribiere)
-    print(rtn[0],rtn[1],val,cnt)
+    # # Polak_Ribiere
+    # rtn, val, cnt=ConjugateGradient(Polak_Ribiere)
+    # print(rtn[0],rtn[1],val,cnt)
